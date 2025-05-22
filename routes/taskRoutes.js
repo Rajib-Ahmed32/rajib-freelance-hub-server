@@ -1,4 +1,3 @@
-// server/routes/tasks.js
 const express = require("express");
 const { ObjectId } = require("mongodb");
 
@@ -31,7 +30,6 @@ module.exports = (taskCollection) => {
     try {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-
       const task = await taskCollection.findOne(query);
 
       if (!task) {
@@ -41,6 +39,23 @@ module.exports = (taskCollection) => {
       res.json(task);
     } catch (error) {
       console.error("Error fetching task by ID:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+
+  router.delete("/:id", async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      const result = await taskCollection.deleteOne({ _id: new ObjectId(id) });
+
+      if (result.deletedCount === 0) {
+        return res.status(404).json({ error: "Task not found" });
+      }
+
+      res.json({ message: "Task deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting task:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
   });
