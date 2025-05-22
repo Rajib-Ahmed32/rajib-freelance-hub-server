@@ -3,19 +3,16 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
-dotenv.config({ path: ".env.local" });
+dotenv.config(); // Loads .env
 
 const app = express();
-const port = process.env.PORT || 3000;
-
 app.use(cors());
 app.use(express.json());
 
-const taskRoutes = require("./routes/taskRoutes");
-app.use("/api/tasks", taskRoutes);
+const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI;
 
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri, {
+const client = new MongoClient(MONGODB_URI, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -26,16 +23,21 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    const db = client.db("freelanceMarketplace");
-    const taskCollection = db.collection("tasks");
+    console.log("MongoDB connected");
 
-    app.locals.taskCollection = taskCollection;
+    const database = client.db("taskdb");
+    const taskCollection = database.collection("task");
 
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
+    // Import and use the task routes
+    const taskRoutes = require("./routes/taskRoutes")(taskCollection);
+    app.use("/api/tasks", taskRoutes);
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
     });
   } catch (err) {
-    console.error("MongoDB connection failed", err);
+    console.error("Connection failed:", err);
   }
 }
+
 run();
