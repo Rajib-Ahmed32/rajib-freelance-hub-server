@@ -3,7 +3,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
-dotenv.config(); // Loads .env
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
@@ -28,7 +28,6 @@ async function run() {
     const database = client.db("taskdb");
     const taskCollection = database.collection("task");
 
-    // Import and use the task routes
     const taskRoutes = require("./routes/taskRoutes")(taskCollection);
     app.use("/api/tasks", taskRoutes);
 
@@ -41,3 +40,7 @@ async function run() {
 }
 
 run();
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
