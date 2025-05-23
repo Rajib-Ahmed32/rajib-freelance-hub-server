@@ -60,5 +60,26 @@ module.exports = (taskCollection) => {
     }
   });
 
+  router.put("/:id", async (req, res) => {
+    try {
+      const id = req.params.id;
+      const updatedTask = req.body;
+
+      const result = await taskCollection.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: updatedTask }
+      );
+
+      if (result.matchedCount === 0) {
+        return res.status(404).json({ error: "Task not found" });
+      }
+
+      res.json({ message: "Task updated successfully" });
+    } catch (error) {
+      console.error("Error updating task:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+
   return router;
 };
