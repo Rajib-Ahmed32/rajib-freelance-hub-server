@@ -1,4 +1,5 @@
 const express = require("express");
+
 const { ObjectId } = require("mongodb");
 
 module.exports = (taskCollection) => {
@@ -7,6 +8,10 @@ module.exports = (taskCollection) => {
   router.post("/", async (req, res) => {
     try {
       const newTask = req.body;
+
+      if (newTask.deadline) {
+        newTask.deadline = new Date(newTask.deadline);
+      }
       const result = await taskCollection.insertOne(newTask);
       res
         .status(201)
@@ -19,7 +24,20 @@ module.exports = (taskCollection) => {
 
   router.get("/", async (req, res) => {
     try {
-      const tasks = await taskCollection.find().toArray();
+      const isFeatured = req.query.featured === "true";
+
+      let tasks;
+
+      if (isFeatured) {
+        tasks = await taskCollection
+          .find({ deadline: { $exists: true, $ne: null } })
+          .sort({ deadline: 1 })
+          .limit(6)
+          .toArray();
+      } else {
+        tasks = await taskCollection.find().toArray();
+      }
+
       res.status(200).json(tasks);
     } catch (error) {
       res.status(500).json({ error: "Failed to fetch tasks" });
