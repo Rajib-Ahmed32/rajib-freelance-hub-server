@@ -1,29 +1,27 @@
-# 🧑‍💼 Rajib Freelance Hub – Server
+# ✅ Task Management API
 
-A backend for a freelance task marketplace app — enabling task posting, updates, and full CRUD with MongoDB and Express.js.
+A backend service for managing tasks with full **CRUD operations**.  
+Built using **Node.js, Express, and MongoDB** with a modular router structure.
 
-🔗 **Client**: [Live Site](https://boisterous-baklava-24b88a.netlify.app/)  
-🔗 **Author GitHub**: [Rajib-Ahmed32](https://github.com/Rajib-Ahmed32)
 
----
+## 🚀 Features
 
-## 🧩 Features
+### 📌 Task Management
+- **POST /api/tasks** → Create a new task (with proper Date conversion)
+- **GET /api/tasks** → Fetch all tasks (with sorting & clean response)
+- **GET /api/tasks/:id** → Fetch a single task by ID
+- **PUT /api/tasks/:id** → Update a task by ID (with error handling)
+- **DELETE /api/tasks/:id** → Delete a task by ID
 
-- ✅ **POST /api/tasks** – Add new task  
-- 📄 **GET /api/tasks** – Retrieve all tasks  
-- 🔍 **GET /api/tasks/:id** – Get task by ID  
-- 📝 **PUT /api/tasks/:id** – Update task  
-- ❌ **DELETE /api/tasks/:id** – Delete task  
-- ⏳ All routes include error handling and proper `Date` conversions
+### 🛠️ Additional Improvements
+- Organized routes with modular Express router
+- Clean error handling (no debug logs in production)
+- Proper date handling for consistency in stored tasks
 
----
 
 ## 🛠️ Tech Stack
+- **Backend:** Node.js, Express
+- **Database:** MongoDB + Mongoose
 
-- **Node.js** + **Express.js**
-- **MongoDB** with **Mongoose**
-- **Modular routing** structure
-- Middleware for error handling and JSON parsing
 
----
 
