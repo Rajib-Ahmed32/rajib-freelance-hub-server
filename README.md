@@ -1,4 +1,4 @@
-# ✅ Task Management API
+# ✅ Rajib freelance hub API
 
 A backend service for managing tasks with full **CRUD operations**.  
 Built using **Node.js, Express, and MongoDB** with a modular router structure.
